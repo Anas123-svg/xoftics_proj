@@ -9,7 +9,7 @@ db_config = {
     "database": "xoftics"
 }
 
-connection_pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **db_config)
+connection_pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=30, **db_config)
 
 def get_db_connection():
     """
