@@ -12,7 +12,7 @@ def run_migration():
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    with open('0001_create_clients_table.sql', 'r') as file:
+    with open('0002_create_admins_table.sql', 'r') as file:
         migration_sql = file.read()
 
     try:
