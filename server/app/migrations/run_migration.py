@@ -12,7 +12,7 @@ def run_migration():
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    with open('0003_create_services_table.sql', 'r') as file:
+    with open('0004_create_portfolio_projects_table.sql', 'r') as file:
         migration_sql = file.read()
 
     try:

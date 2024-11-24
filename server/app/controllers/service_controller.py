@@ -119,11 +119,9 @@ def update_service(service_id: int, service: ServiceUpdate):
     try:
         cursor = connection.cursor()
 
-        # Start building the UPDATE query with conditions
         set_fields = []
         params = []
 
-        # Update fields only if they are provided in the request
         if service.title is not None:
             set_fields.append("title = %s")
             params.append(service.title)
@@ -134,28 +132,22 @@ def update_service(service_id: int, service: ServiceUpdate):
             set_fields.append("content = %s")
             params.append(service.content)
 
-        # Ensure there's always a parameter for the service_id
-        params.append(service_id)  # Add the service_id as the last parameter
+        params.append(service_id)  
 
-        # Create the final query string dynamically
         update_query = f"""
         UPDATE services SET {', '.join(set_fields)} WHERE id = %s
         """
 
-        # Execute the update query
-        cursor.execute(update_query, tuple(params))  # Ensure parameters are passed as a tuple
+        cursor.execute(update_query, tuple(params))  
         connection.commit()
 
-        # Update images if provided
         if service.images is not None:
-            # Delete existing images for the service before inserting new ones
             delete_image_query = """
             DELETE FROM service_images WHERE service_id = %s
             """
             cursor.execute(delete_image_query, (service_id,))
             connection.commit()
 
-            # Insert new images if any are provided
             image_query = """
             INSERT INTO service_images (service_id, image_url) VALUES (%s, %s)
             """
@@ -163,16 +155,13 @@ def update_service(service_id: int, service: ServiceUpdate):
                 cursor.execute(image_query, (service_id, image))
             connection.commit()
 
-        # Update technologies if provided
         if service.technologies is not None:
-            # Delete existing technologies for the service before inserting new ones
             delete_tech_query = """
             DELETE FROM service_technologies WHERE service_id = %s
             """
             cursor.execute(delete_tech_query, (service_id,))
             connection.commit()
 
-            # Insert new technologies if any are provided
             tech_query = """
             INSERT INTO service_technologies (service_id, technology_name) VALUES (%s, %s)
             """
@@ -207,21 +196,18 @@ def delete_service(service_id: int):
     try:
         cursor = connection.cursor()
 
-        # Delete associated images
         delete_image_query = """
         DELETE FROM service_images WHERE service_id = %s
         """
         cursor.execute(delete_image_query, (service_id,))
         connection.commit()
 
-        # Delete associated technologies
         delete_tech_query = """
         DELETE FROM service_technologies WHERE service_id = %s
         """
         cursor.execute(delete_tech_query, (service_id,))
         connection.commit()
 
-        # Delete the service itself
         delete_service_query = """
         DELETE FROM services WHERE id = %s
         """
@@ -245,24 +231,20 @@ def index_services():
     try:
         cursor = connection.cursor()
 
-        # Fetch all services
         query = "SELECT id, title, description FROM services"
         cursor.execute(query)
         services = cursor.fetchall()
 
-        # Fetch images and technologies for each service
         services_data = []
         for service in services:
             service_id = service[0]
 
-            # Fetch images
             image_query = """
             SELECT image_url FROM service_images WHERE service_id = %s
             """
             cursor.execute(image_query, (service_id,))
             images = [row[0] for row in cursor.fetchall()]
 
-            # Fetch technologies
             tech_query = """
             SELECT technology_name FROM service_technologies WHERE service_id = %s
             """

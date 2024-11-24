@@ -43,12 +43,12 @@ def update_service_route(service_id: int, service: ServiceUpdate):
 
 
 @router.delete("/{service_id}", response_model=dict)
-async def delete_service_route(service_id: int):
+def delete_service_route(service_id: int):
     """
     Endpoint to delete a service by ID.
     """
     try:
-        return await delete_service(service_id)
+        return delete_service(service_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting service: {str(e)}")
 
