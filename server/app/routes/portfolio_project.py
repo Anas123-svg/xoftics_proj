@@ -17,8 +17,6 @@ router = APIRouter()
 @router.post("/create", summary="Create a new portfolio project")
 def create(project: PortfolioProjectCreate):
     return create_portfolio_project(project)
-
-
 @router.get("/{project_id}", response_model=dict)
 def get_portfolio_project_route(project_id: int):
     try:

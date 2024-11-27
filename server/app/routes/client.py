@@ -24,7 +24,7 @@ def login_client(request: LoginRequest):
 
 @router.get("/profile", summary="Get client details by token")
 def get_profile(Authorization: str = Header(...)):
-    token = Authorization.split("Bearer ")[-1]  # Extract the token part
+    token = Authorization.split("Bearer ")[-1] 
     return get_client_by_token(token)
 
 @router.get("/", summary="Get all clients")
