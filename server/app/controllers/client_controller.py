@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from app.database import get_db_connection
-from app.schemas.client import ClientCreate
+from app.schemas.client import ClientCreate, ClientUpdate
 import jwt
 from app.core.security import create_access_token, get_password_hash
 from app.utils.utils import verify_password  
@@ -109,8 +109,9 @@ def get_client_by_token(token: str):
         raise HTTPException(status_code=401, detail="Invalid token")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
+    
+    
+    
         
         
 def get_all_clients():
@@ -145,5 +146,56 @@ def delete_client(client_id: int):
         if cursor.rowcount == 0:
             raise HTTPException(status_code=404, detail="Client not found")
         return {"message": "Client deleted successfully"}
+    finally:
+        connection.close()
+
+def update_client(client_id: int, updated_data: ClientUpdate):
+    connection = get_db_connection()
+
+    try:
+        
+        updated_fields = updated_data.dict(exclude_unset=True)
+
+        if not updated_fields:
+            raise HTTPException(status_code=400, detail="No fields to update")
+
+        
+        cursor = connection.cursor(dictionary=True)
+        query = "UPDATE clients SET "
+        query_parts = []
+        values = []
+
+        for key, value in updated_fields.items():
+            query_parts.append(f"{key} = %s")
+            values.append(value)
+
+        query += ", ".join(query_parts) + " WHERE id = %s"
+        values.append(client_id)
+
+        
+        print("Generated Query:", query)
+        print("Values:", values)
+
+        cursor.execute(query, tuple(values))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail=f"Client with id {client_id} not found")
+
+        
+        cursor.execute("SELECT * FROM clients WHERE id = %s", (client_id,))
+        updated_client = cursor.fetchone()
+
+        if not updated_client:
+            raise HTTPException(status_code=404, detail=f"Client with id {client_id} not found after update")
+
+        
+        return {
+            "message": "Client updated successfully",
+            "client": updated_client,
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating client: {str(e)}")
     finally:
         connection.close()

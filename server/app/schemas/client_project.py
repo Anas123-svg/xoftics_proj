@@ -6,6 +6,7 @@ from datetime import datetime
 class ClientProjectCreate(BaseModel):
     title: str = Field(..., max_length=255)
     description: Optional[str] = None
+    details: Optional[str] = None
     budget: Optional[Decimal] = None
     deadline: Optional[str] = Field(None, max_length=255)
     status: Optional[str] = Field(None, max_length=50)

@@ -25,13 +25,14 @@ def create_client_project(client_project: ClientProjectCreate, token: str):
 
         cursor = connection.cursor()
         query = """
-        INSERT INTO client_projects (client_id, title, description, budget, deadline, status, update_by_admin, progress)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO client_projects (client_id, title, description, details, budget, deadline, status, update_by_admin, progress)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor.execute(query, (
             client_id,
             client_project.title,
             client_project.description,
+            client_project.details,
             client_project.budget,
             client_project.deadline,
             client_project.status,
@@ -49,6 +50,7 @@ def create_client_project(client_project: ClientProjectCreate, token: str):
                 "client_id": client_id,
                 "title": client_project.title,
                 "description": client_project.description,
+                "details": client_project.details,
                 "budget": client_project.budget,
                 "deadline": client_project.deadline,
                 "status": client_project.status,

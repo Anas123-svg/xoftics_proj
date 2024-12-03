@@ -11,9 +11,17 @@ from app.routes.portfolio_project import router as portfolio_project_router
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True, 
+    allow_methods=["*"], 
+    allow_headers=["*"],  
+)
 
 app.include_router(admin_router, prefix="/admins", tags=["Admins"])
 app.include_router(service_router, prefix="/services", tags=["Services"])

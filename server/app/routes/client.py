@@ -8,7 +8,7 @@ from app.controllers.client_controller import (
     get_client_by_token,
     get_all_clients,
     get_client_by_id,
-    #update_client,
+    update_client,
     delete_client,
 )
 
@@ -35,9 +35,9 @@ def get_clients():
 def get_client(client_id: int):
     return get_client_by_id(client_id)
 
-#@router.put("/{client_id}", summary="Update client details")
-#def update(client_id: int, client: ClientUpdate):
- #   return update_client(client_id, client)
+@router.put("/{client_id}", summary="Update client details")
+def update(client_id: int, client: ClientUpdate):
+    return update_client(client_id, client)
 
 @router.delete("/{client_id}", summary="Delete a client")
 def delete(client_id: int):
