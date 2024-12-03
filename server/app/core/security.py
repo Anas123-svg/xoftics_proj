@@ -9,9 +9,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
-    """
-    Create a JWT token for the user.
-    """
+
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -24,13 +22,9 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 def verify_password(plain_password, hashed_password):
-    """
-    Verify that the password matches the hashed password.
-    """
+
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password):
-    """
-    Hash the password.
-    """
+
     return pwd_context.hash(password)

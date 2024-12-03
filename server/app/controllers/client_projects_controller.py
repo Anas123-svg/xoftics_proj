@@ -2,10 +2,6 @@ from fastapi import HTTPException
 from app.database import get_db_connection 
 from app.schemas.client_project import ClientProjectCreate, ClientProjectUpdate
 import json
-
-from fastapi import HTTPException
-from app.database import get_db_connection
-from app.schemas.client_project import ClientProjectCreate
 import jwt
 
 def create_client_project(client_project: ClientProjectCreate, token: str):
