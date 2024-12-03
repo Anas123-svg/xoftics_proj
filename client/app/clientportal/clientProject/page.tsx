@@ -4,6 +4,7 @@ import axios from "axios";
 import Sidebar from "../Sidebar/page";
 import { useRouter } from "next/navigation";
 
+// Define the interface for the form data structure
 interface ClientProjectForm {
   title: string;
   description: string;
@@ -16,6 +17,7 @@ interface ClientProjectForm {
 }
 
 const ClientProjects: React.FC = () => {
+  // State to handle form data
   const [formData, setFormData] = useState<ClientProjectForm>({
     title: "",
     description: "",
@@ -27,10 +29,14 @@ const ClientProjects: React.FC = () => {
     details: "",
   });
 
+  // States to manage error and success messages
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null); 
+
+  // Hook for navigation
   const router = useRouter();  
 
+  // Handle input changes for text and number fields
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -41,6 +47,7 @@ const ClientProjects: React.FC = () => {
     }));
   };
 
+  // Handle checkbox changes (update_by_admin)
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
     setFormData((prevData) => ({
@@ -49,6 +56,7 @@ const ClientProjects: React.FC = () => {
     }));
   };
 
+  // Handle form submission and make an API request
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -96,7 +104,7 @@ const ClientProjects: React.FC = () => {
       className="flex justify-center items-center min-h-screen w-full p-4 mt-20 mb-10"
       style={{ background: "linear-gradient(90deg, #011111, #031010, #011111)" }}
     >
-      {/* Sidebar */}
+      {/* Sidebar Component */}
       <Sidebar />
 
       {/* Main Content */}
@@ -106,7 +114,7 @@ const ClientProjects: React.FC = () => {
           background: "linear-gradient(90deg, #011111, #031010, #011111)",
         }}
       >
-        {/* Card Form */}
+        {/* Form Card */}
         <div
           className="w-[90vw] sm:w-[50%] max-w-6xl bg-white flex flex-col items-center bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 cursor-pointer"
           style={{
@@ -114,8 +122,10 @@ const ClientProjects: React.FC = () => {
           }}
         >
           <h1 className="text-3xl font-bold tracking-wide uppercase mb-6 text-[#38E5E8]">Add Client Project</h1>
+          
+          {/* Form for adding project */}
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-            {/* Title */}
+            {/* Project Title */}
             <div className="w-full">
               <input
                 type="text"
@@ -193,7 +203,7 @@ const ClientProjects: React.FC = () => {
               </select>
             </div>
 
-            {/* Progress */}
+            {/* Project Progress */}
             <div className="w-full">
               <input
                 type="number"
@@ -214,6 +224,12 @@ const ClientProjects: React.FC = () => {
               Submit
             </button>
           </form>
+
+          {/* Display error message if any */}
+          {error && <div className="text-red-500 mt-4">{error}</div>}
+
+          {/* Display success message if any */}
+          {success && <div className="text-green-500 mt-4">{success}</div>}
         </div>
       </div>
     </div>
@@ -221,3 +237,4 @@ const ClientProjects: React.FC = () => {
 };
 
 export default ClientProjects;
+
